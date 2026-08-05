@@ -1,0 +1,24 @@
+[project]
+name = "shinsa-evolve"
+version = "0.0.1"
+description = "Audit-gated LLM-driven recipe evolution: making self-reported training results trustworthy"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "cmaes>=0.10",
+    "gymnasium>=1.0",
+    "gymnax>=0.0.8",
+    "jax>=0.4.26,<0.11",  # gymnax triggers a scatter dtype FutureWarning; pin until verified on newer jax
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+box2d = ["gymnasium[box2d]>=1.0"]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["shinsa_evolve*"]
