@@ -140,14 +140,15 @@ def main(argv=None):
                               archive, args.mode, args.env, train_seed=args.rng_seed * 1000)
 
         if args.seed_variance > 0:
-            base = archive.next_id()
-            for i in range(args.seed_variance):
-                cid = base + i
+            # Idempotent: target is 1 seed + N retrains, so retry wrappers can rerun safely.
+            while archive.count_done() < 1 + args.seed_variance:
+                idx = archive.count_done()
+                cid = archive.next_id()
                 path = run_dir / "recipes" / "cand_000.py"
                 process_candidate(cid, path, 0, {"variance_retrain": True}, adapter,
                                   budget, audit_episodes, archive, args.mode, args.env,
-                                  train_seed=args.rng_seed * 1000 + (i + 1) * 97)
-            log(f"seed-variance retrains done ({args.seed_variance})")
+                                  train_seed=args.rng_seed * 1000 + idx * 97)
+            log(f"seed-variance complete ({args.seed_variance} retrains)")
             return 0
 
         consecutive_failures = 0
