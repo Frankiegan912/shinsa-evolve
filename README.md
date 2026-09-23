@@ -1,5 +1,7 @@
 # shinsa-evolve
 
+English | [简体中文](README.zh-CN.md)
+
 Can you trust the scores an LLM-driven program-evolution loop reports about its own
 candidates? This repository studies that question for *training recipes*: small Python
 modules, written by an LLM mutation operator, that control reward shaping, evaluation
@@ -9,6 +11,15 @@ CMA-ES).
 **Status:** public research artifact and technical report; not peer reviewed. The replicated
 evidence is a LunarLander mechanism-and-ablation case study, not a claim of a general law across
 models or environments. Read the [technical report](paper/main.pdf).
+
+## Where the audit pattern applies
+
+ShinsaEvolve places a harness-owned audit gate between candidate training and outer-loop selection.
+It evaluates the resulting artifact with a fixed metric and held-out inputs instead of selecting
+only from the candidate's training report.
+
+This pattern applies to automated loss/reward design, hyperparameter and training-recipe search,
+checkpoint or agent-workflow selection, and automated experiment pipelines.
 
 ## Main result
 
@@ -42,6 +53,29 @@ This is one replay of the audited-selection run with outer seed 101, candidate 9
 seed 995252232 (raw return 190.06). It illustrates the environment, not an independent run or
 the candidate's 32-episode mean. Recreate the animation and paper still from the archived policy:
 `python scripts/render_lunar_demo.py`. Rendering makes no training, model, or network calls.
+
+### Selection comparison (illustrative)
+
+![Self-report selection versus independent-audit selection across three outer seeds](assets/lunarlander_selection_comparison.gif)
+
+Each row compares the final v3 policy selected by self-reported training score (left) with the
+policy selected by independent audit (right) for the same outer seed. Both policies in a row are
+replayed on the same display seed, deterministically derived from the outer-seed label before
+evaluation. Labels show that single episode's raw return and the policy's archived 32-episode audit
+mean, alongside the training score reported during search. In all three self-report runs the
+selected policy reported $10^9$, yet its archived audit mean was much lower than the policy chosen
+through the audit gate. This is a visualization of six archived policies, not a before/after
+training experiment or additional outer-loop replication. A single display episode can be noisy;
+the paper's claims are based on the full audits and run-level results. Recreate it with
+`python scripts/render_lunar_comparison.py`; this makes no training, model, or network calls.
+
+![Raw-reward audit quality of the incumbent selected as each search progresses](assets/lunarlander_selection_trajectory.png)
+
+The thin lines are the three independent outer runs and the thick lines are their means. Selection
+on self-reported scores quickly locks onto saturated reports while the raw-audit quality of its
+incumbent deteriorates. Audit selection instead keeps the best audited incumbent seen so far, so
+its audit-quality trajectory is non-decreasing by construction. The plot describes these archived
+runs; it is not a population convergence-rate estimate.
 
 This is a clean-room, from-scratch implementation; it contains no code, prompts, data, or
 text from any prior private implementation.
@@ -107,9 +141,19 @@ The launchers use non-interactive `codex exec` with an ephemeral session, ignore
 configuration/rules, an empty read-only working directory, and `SHINSA_MUTATE_REASONING=low`.
 Authenticate first with `codex login` using ChatGPT; this path consumes Codex subscription
 allowance rather than API credits. Override the binary with `SHINSA_CODEX_BIN`.
-`SHINSA_MUTATE_MODEL` is mandatory for any run that mutates candidates. The implementation
-also retains the legacy `claude` provider, selected with `SHINSA_MUTATE_PROVIDER=claude` and
+`SHINSA_MUTATE_MODEL` is mandatory for any run that mutates candidates. The implementation also
+supports the Claude Code CLI provider, selected with `SHINSA_MUTATE_PROVIDER=claude` and
 overridden with `SHINSA_CLAUDE_BIN`.
+
+### Mutation provider support
+
+The implemented adapters currently support **Codex CLI** and **Claude Code CLI**. For Claude Code:
+
+```bash
+export SHINSA_MUTATE_PROVIDER=claude
+export SHINSA_MUTATE_MODEL=<exact-Claude-model-id>
+export SHINSA_CLAUDE_BIN=claude
+```
 
 Mutation protocol v3 records a hash of the full static prompt in `run_config.json`, states the
 validator's shaped-reward magnitude bound in the contract, feeds rejection reasons into retry
@@ -208,5 +252,9 @@ This is an independent research project by Qindong Gan. LLM coding assistants we
 implementation, debugging, analysis, and manuscript editing. Research scope, experiment approval,
 evidence checks, claim boundaries, and public-release decisions remained under the author's
 oversight. Exact mutation-model provenance for the experiments is recorded in each run archive.
+
+## Future work
+
+Additional API-based or local model providers can be supported through tested mutation adapters.
 
 License: Apache-2.0. See `LICENSE`.
