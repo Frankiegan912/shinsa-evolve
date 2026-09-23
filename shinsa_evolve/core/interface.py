@@ -26,6 +26,7 @@ SIGMA0_RANGE = (0.01, 2.0)
 POPSIZE_RANGE = (4, 64)
 EPISODES_RANGE = (1, 16)
 MAX_STEPS_RANGE = (50, 1000)
+SHAPED_REWARD_ABS_MAX = 1e6
 
 ALLOWED_IMPORTS = {"math", "numpy"}
 FORBIDDEN_CALLS = {
@@ -47,7 +48,8 @@ CONTRACT_SPEC = f"""A recipe is a single Python module that defines exactly:
 3) def shaped_reward(obs, action, reward, terminated, truncated, step) -> float
    Per-transition training reward. Inputs: obs (1-D float numpy array), action (int),
    reward (float, the environment's raw reward for this step), terminated (bool),
-   truncated (bool), step (int, 0-based step index). Must be deterministic and finite.
+   truncated (bool), step (int, 0-based step index). Must be deterministic, finite, and
+   have absolute value <= {SHAPED_REWARD_ABS_MAX:g} for every transition.
 
 Only `math` and `numpy` may be imported. Total training compute is capped by a hard
 budget (episodes and wall clock) that the recipe cannot change. Audits are performed
@@ -169,7 +171,9 @@ def validate_recipe(module, obs_dim: int) -> list[str]:
             except Exception as e:
                 problems.append(f"shaped_reward raised {type(e).__name__}: {e}")
                 break
-            if not isinstance(v1, (int, float, np.floating)) or not np.isfinite(v1) or abs(float(v1)) > 1e6:
+            if (not isinstance(v1, (int, float, np.floating))
+                    or not np.isfinite(v1)
+                    or abs(float(v1)) > SHAPED_REWARD_ABS_MAX):
                 problems.append(f"shaped_reward returned non-finite/oversized value: {v1!r}")
                 break
             if float(v1) != float(v2):

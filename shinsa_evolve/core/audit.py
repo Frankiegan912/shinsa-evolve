@@ -23,9 +23,17 @@ class AuditResult:
     std: float
     per_episode: list
     seeds: list
+    max_steps: int
 
     def stats(self) -> dict:
-        return {"audited_score": self.score, "audited_std": self.std, "episodes": len(self.per_episode)}
+        return {
+            "audited_score": self.score,
+            "audited_std": self.std,
+            "episodes": len(self.per_episode),
+            "max_steps": self.max_steps,
+            "seeds": self.seeds,
+            "per_episode": self.per_episode,
+        }
 
 
 def fresh_seeds(n: int) -> list[int]:
@@ -41,4 +49,5 @@ def audit(params: np.ndarray, adapter, episodes: int) -> AuditResult:
         std=float(raw.std()),
         per_episode=[float(x) for x in raw],
         seeds=seeds,
+        max_steps=int(adapter.audit_max_steps),
     )

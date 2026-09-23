@@ -3,6 +3,7 @@ name = "shinsa-evolve"
 version = "0.0.1"
 description = "Audit-gated LLM-driven recipe evolution: making self-reported training results trustworthy"
 requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
 dependencies = [
     "numpy>=1.24",
     "cmaes>=0.10",
@@ -17,7 +18,7 @@ box2d = ["gymnasium[box2d]>=1.0"]
 dev = ["pytest>=8"]
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=65.5", "wheel>=0.38"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]

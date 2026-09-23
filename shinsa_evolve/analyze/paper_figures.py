@@ -7,6 +7,7 @@ mode identity is additionally carried by legend + direct labels, never color alo
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -32,10 +33,17 @@ plt.rcParams.update({
     "legend.frameon": False,
 })
 
-ENVS = [
-    ("MinAtar Breakout", "runs/breakout_audited", "runs/breakout_claimed", "runs/breakout_seed_variance"),
-    ("LunarLander-v3", "runs/lunar_audited", "runs/lunar_claimed", "runs/lunar_seed_variance"),
-]
+RUN_LAYOUT = (
+    ("MinAtar Breakout", "breakout_audited", "breakout_claimed", "breakout_seed_variance"),
+    ("LunarLander-v3", "lunar_audited", "lunar_claimed", "lunar_seed_variance"),
+)
+
+
+def env_paths(runs_root: Path):
+    return [
+        (title, *(str(runs_root / name) for name in names))
+        for title, *names in RUN_LAYOUT
+    ]
 
 
 def _variance_band(run_dir):
@@ -51,9 +59,9 @@ def _save(fig, out: Path, name: str):
     plt.close(fig)
 
 
-def fig_gap(runs, out):
+def fig_gap(runs, out, envs):
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.6))
-    for ax, (title, aud_d, cla_d, _) in zip(axes, ENVS):
+    for ax, (title, aud_d, cla_d, _) in zip(axes, envs):
         for d, color, label in ((aud_d, C_AUD, "audited selection"), (cla_d, C_CLA, "claimed selection")):
             gaps = np.array([r["gap"] for r in runs[d]["done"]])
             ax.hist(gaps, bins=16, color=color, alpha=0.55, label=f"{label} ({(gaps > 0).sum()}/{len(gaps)} > 0)")
@@ -65,10 +73,10 @@ def fig_gap(runs, out):
     _save(fig, out, "f1_gap")
 
 
-def fig_scatter(runs, out):
+def fig_scatter(runs, out, envs):
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 3.0))
     legend_locs = ("upper left", "lower right")
-    for ax, loc, (title, aud_d, cla_d, _) in zip(axes, legend_locs, ENVS):
+    for ax, loc, (title, aud_d, cla_d, _) in zip(axes, legend_locs, envs):
         for d, color, label in ((aud_d, C_AUD, "audited selection"), (cla_d, C_CLA, "claimed selection")):
             done = runs[d]["done"]
             ax.scatter([r["audited"] for r in done], [r["claimed"] for r in done],
@@ -81,7 +89,7 @@ def fig_scatter(runs, out):
         ax.legend(fontsize=7, loc=loc)
     # Direct label for the LunarLander poster-child candidate, in the clear space
     # to its upper right (the legend sits lower right).
-    lc = runs["runs/lunar_claimed"]["done"]
+    lc = runs[envs[1][2]]["done"]
     champ = max(lc, key=lambda r: r["claimed"])
     axes[1].annotate(f"claims {champ['claimed']:+.0f},\nscores {champ['audited']:+.0f}",
                      xy=(champ["audited"], champ["claimed"]), fontsize=7,
@@ -91,9 +99,9 @@ def fig_scatter(runs, out):
     _save(fig, out, "f2_scatter")
 
 
-def fig_trajectory(runs, out):
+def fig_trajectory(runs, out, envs):
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.8))
-    for ax, (title, aud_d, cla_d, var_d) in zip(axes, ENVS):
+    for ax, (title, aud_d, cla_d, var_d) in zip(axes, envs):
         lo, hi = _variance_band(var_d)
         ax.axhspan(lo, hi, color=C_BAND, alpha=0.35, lw=0, label="seed-recipe retrain range")
         for d, color, label in ((aud_d, C_AUD, "audited selection"), (cla_d, C_CLA, "claimed selection")):
@@ -107,9 +115,9 @@ def fig_trajectory(runs, out):
     _save(fig, out, "f3_trajectory")
 
 
-def fig_outcomes(runs, out):
+def fig_outcomes(runs, out, envs):
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.6))
-    for ax, (title, aud_d, cla_d, _) in zip(axes, ENVS):
+    for ax, (title, aud_d, cla_d, _) in zip(axes, envs):
         aud, cla = runs[aud_d]["done"], runs[cla_d]["done"]
         n = min(len(aud), len(cla))
         vals = [
@@ -148,15 +156,20 @@ def mutation_stats(runs):
           f"({100 * ok0 / max(total, 1):.0f}%), mean CLI latency {np.mean(secs):.0f}s")
 
 
-def main():
-    out = Path("paper/figs")
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--runs-root", type=Path, default=Path("runs"))
+    parser.add_argument("--out", type=Path, default=Path("paper/figs"))
+    args = parser.parse_args(argv)
+    out = args.out
     out.mkdir(parents=True, exist_ok=True)
-    dirs = [d for _, a, c, v in ENVS for d in (a, c, v)]
+    envs = env_paths(args.runs_root)
+    dirs = [d for _, a, c, v in envs for d in (a, c, v)]
     runs = {d: load_run(d) for d in dirs}
-    fig_gap(runs, out)
-    fig_scatter(runs, out)
-    fig_trajectory(runs, out)
-    fig_outcomes(runs, out)
+    fig_gap(runs, out, envs)
+    fig_scatter(runs, out, envs)
+    fig_trajectory(runs, out, envs)
+    fig_outcomes(runs, out, envs)
     mutation_stats(runs)
     print(f"paper figures written to {out}/")
 

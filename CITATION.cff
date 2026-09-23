@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, please cite the repository and technical report."
+title: "ShinsaEvolve: Independent Audits in LLM-Driven Recipe Evolution"
+type: software
+authors:
+  - family-names: Gan
+    given-names: Qindong
+    email: ganqindong@fuji.waseda.jp
+version: 0.0.1
+license: Apache-2.0
+repository-code: "https://github.com/Frankiegan912/shinsa-evolve"
+abstract: >-
+  A reproducible research system and case study comparing candidate-reported training scores
+  with independent fresh-seed raw-reward audits in LLM-driven reinforcement-learning recipe
+  evolution.

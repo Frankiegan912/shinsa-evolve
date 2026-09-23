@@ -1,0 +1,336 @@
+{
+  "groups": {
+    "audited": {
+      "independent_outer_runs": 3,
+      "selected_audited": {
+        "mean": -19.355428664823496,
+        "median": -6.672260943535136,
+        "values": [
+          -6.672260943535136,
+          -69.2898716525462,
+          17.89584660161085
+        ]
+      },
+      "selection_errors": 0,
+      "selection_regret": {
+        "mean": 0.0,
+        "median": 0.0,
+        "values": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "claimed": {
+      "independent_outer_runs": 3,
+      "selected_audited": {
+        "mean": -137.0770373208358,
+        "median": -140.10809634093778,
+        "values": [
+          -166.90910976781694,
+          -140.10809634093778,
+          -104.21390585375268
+        ]
+      },
+      "selection_errors": 3,
+      "selection_regret": {
+        "mean": 110.7330619485912,
+        "median": 85.97308072589031,
+        "values": [
+          172.29804257103788,
+          85.97308072589031,
+          73.92806254884542
+        ]
+      }
+    }
+  },
+  "matched_seed_descriptive_difference_audited_minus_claimed": {
+    "mean": 117.72160865601231,
+    "median": 122.10975245536352,
+    "values": [
+      160.23684882428182,
+      70.81822468839158,
+      122.10975245536352
+    ]
+  },
+  "mutation_total": {
+    "input_tokens": 1498354,
+    "output_tokens": 30339,
+    "rejected_attempts": 0,
+    "requests": 84
+  },
+  "protocol": {
+    "mutation_protocol_version": 4,
+    "mutator": {
+      "auth": "chatgpt",
+      "binary": "codex",
+      "cli_version": "codex-cli 0.146.0",
+      "model": "gpt-5.6-sol",
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "protocol_version": 4,
+      "provider": "codex",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df"
+  },
+  "runs": [
+    {
+      "archive_sha256": "b77233c087a181c5b1c0882980fc2b47411680e2a53422d416644e9f664cc873",
+      "done": 15,
+      "failed": 0,
+      "mode": "claimed",
+      "mutation": {
+        "input_tokens": 249584,
+        "output_tokens": 3999,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": 5.388932803220943,
+        "id": 8
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 101,
+      "run_dir": "pilot_claimed_seed101_retry",
+      "selected": {
+        "audited": -166.90910976781694,
+        "best_generation": 139,
+        "claimed": 296.34049664640656,
+        "episodes_per_eval": 1,
+        "gap": 463.24960641422354,
+        "id": 10,
+        "max_steps": 1000
+      },
+      "selection_error": true,
+      "selection_regret": 172.29804257103788
+    },
+    {
+      "archive_sha256": "dee7a6d8a607f4fce3bed095e143390ad3281e2733feb9e4c54513c27fcb5998",
+      "done": 15,
+      "failed": 0,
+      "mode": "audited",
+      "mutation": {
+        "input_tokens": 249565,
+        "output_tokens": 5562,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": -6.672260943535136,
+        "id": 13
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 101,
+      "run_dir": "pilot_audited_seed101",
+      "selected": {
+        "audited": -6.672260943535136,
+        "best_generation": 57,
+        "claimed": 250.57826042825897,
+        "episodes_per_eval": 1,
+        "gap": 257.2505213717941,
+        "id": 13,
+        "max_steps": 500
+      },
+      "selection_error": false,
+      "selection_regret": 0.0
+    },
+    {
+      "archive_sha256": "3aa4d703ce7ec54e7f96a412819442eacfa60f965efa2273f6c7fa7f05788d1e",
+      "done": 15,
+      "failed": 0,
+      "mode": "claimed",
+      "mutation": {
+        "input_tokens": 249820,
+        "output_tokens": 5033,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": -54.135015615047465,
+        "id": 7
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 202,
+      "run_dir": "claimed_seed202",
+      "selected": {
+        "audited": -140.10809634093778,
+        "best_generation": 160,
+        "claimed": 317.51787644536205,
+        "episodes_per_eval": 1,
+        "gap": 457.6259727862998,
+        "id": 6,
+        "max_steps": 1000
+      },
+      "selection_error": true,
+      "selection_regret": 85.97308072589031
+    },
+    {
+      "archive_sha256": "01febbcc333528e3fed945deab1dabcb7e64f0108c8b3ba4c1749b2a66d867d8",
+      "done": 15,
+      "failed": 0,
+      "mode": "audited",
+      "mutation": {
+        "input_tokens": 250338,
+        "output_tokens": 5736,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": -69.2898716525462,
+        "id": 4
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 202,
+      "run_dir": "audited_seed202",
+      "selected": {
+        "audited": -69.2898716525462,
+        "best_generation": 111,
+        "claimed": 272.59570298604797,
+        "episodes_per_eval": 1,
+        "gap": 341.88557463859416,
+        "id": 4,
+        "max_steps": 500
+      },
+      "selection_error": false,
+      "selection_regret": 0.0
+    },
+    {
+      "archive_sha256": "f3cf5ea2cb882c746e563c2a3790712529b884265a53a922a9de97ebcece0e77",
+      "done": 15,
+      "failed": 0,
+      "mode": "claimed",
+      "mutation": {
+        "input_tokens": 249097,
+        "output_tokens": 4807,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": -30.28584330490726,
+        "id": 3
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 303,
+      "run_dir": "claimed_seed303",
+      "selected": {
+        "audited": -104.21390585375268,
+        "best_generation": 97,
+        "claimed": 310.20796913408304,
+        "episodes_per_eval": 1,
+        "gap": 414.42187498783574,
+        "id": 9,
+        "max_steps": 500
+      },
+      "selection_error": true,
+      "selection_regret": 73.92806254884542
+    },
+    {
+      "archive_sha256": "56f543e3b6628d6e00b5a6ce716fa28aa65c8a668500ac24ba3fe9fb62a9ac61",
+      "done": 15,
+      "failed": 0,
+      "mode": "audited",
+      "mutation": {
+        "input_tokens": 249950,
+        "output_tokens": 5202,
+        "rejected_attempts": 0,
+        "requests": 14
+      },
+      "mutator": {
+        "auth": "chatgpt",
+        "binary": "codex",
+        "cli_version": "codex-cli 0.146.0",
+        "model": "gpt-5.6-sol",
+        "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+        "protocol_version": 4,
+        "provider": "codex",
+        "reasoning_effort": "low"
+      },
+      "oracle_by_audit": {
+        "audited": 17.89584660161085,
+        "id": 1
+      },
+      "prompt_sha256": "f420fda49b01c141784c78adda11992bd624102a3c93c1960019891e96e107df",
+      "rng_seed": 303,
+      "run_dir": "audited_seed303",
+      "selected": {
+        "audited": 17.89584660161085,
+        "best_generation": 61,
+        "claimed": 189.8661569545427,
+        "episodes_per_eval": 2,
+        "gap": 171.97031035293185,
+        "id": 1,
+        "max_steps": 1000
+      },
+      "selection_error": false,
+      "selection_regret": 0.0
+    }
+  ],
+  "schema_version": 1,
+  "scope": {
+    "candidates_per_run": 15,
+    "environment": "lunarlander",
+    "independent_outer_runs_per_mode": 3,
+    "inference_boundary": "descriptive ablation; n=3 per mode",
+    "modes": [
+      "audited",
+      "claimed"
+    ],
+    "rng_seeds": [
+      101,
+      202,
+      303
+    ],
+    "training_reward": "fixed_raw"
+  }
+}

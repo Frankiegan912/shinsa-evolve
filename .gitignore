@@ -5,5 +5,7 @@ __pycache__/
 *.egg-info/
 runs/
 analysis_out/
+dist/
 .DS_Store
+.obsidian/
 implementation-notes.md

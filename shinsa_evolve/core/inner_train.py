@@ -33,18 +33,25 @@ class TrainResult:
     best_params: np.ndarray
     claimed_score: float
     train_raw_of_best: float
+    best_generation: int
     generations: int
     episodes_used: int
     wall_seconds: float
+    train_seed: int
+    seed_pool: list[int]
     history: list = field(default_factory=list)
 
     def stats(self) -> dict:
         return {
             "claimed_score": self.claimed_score,
             "train_raw_of_best": self.train_raw_of_best,
+            "best_generation": self.best_generation,
             "generations": self.generations,
             "episodes_used": self.episodes_used,
             "wall_seconds": round(self.wall_seconds, 2),
+            "train_seed": self.train_seed,
+            "seed_pool": self.seed_pool,
+            "history": self.history,
         }
 
 
@@ -63,6 +70,7 @@ def train(recipe, adapter, budget: TrainBudget, train_seed: int) -> TrainResult:
     best_fitness = -np.inf
     best_params = np.zeros(dim)
     best_raw = -np.inf
+    best_generation = -1
     history = []
     episodes_used = 0
     gen = 0
@@ -88,6 +96,7 @@ def train(recipe, adapter, budget: TrainBudget, train_seed: int) -> TrainResult:
             best_fitness = float(fitness[gi])
             best_params = np.array(members[gi])
             best_raw = float(raw[gi].mean())
+            best_generation = gen
 
         episodes_used += popsize * episodes
         history.append({
@@ -107,8 +116,11 @@ def train(recipe, adapter, budget: TrainBudget, train_seed: int) -> TrainResult:
         best_params=best_params,
         claimed_score=float(best_fitness),
         train_raw_of_best=float(best_raw),
+        best_generation=best_generation,
         generations=gen,
         episodes_used=episodes_used,
         wall_seconds=time.monotonic() - t0,
+        train_seed=int(train_seed),
+        seed_pool=[int(seed) for seed in seed_pool],
         history=history,
     )
